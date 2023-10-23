@@ -93,7 +93,7 @@ class GraphModel {
   /**
    * 获取自定义连线轨迹
    */
-  getAnchorLine: Definition['getAnchorLine'];
+  customTrajectory: Definition['customTrajectory'];
   /**
    * 在图上操作创建边时，默认使用的边类型.
    */
@@ -151,7 +151,7 @@ class GraphModel {
       idGenerator,
       edgeGenerator,
       animation,
-      getAnchorLine,
+      customTrajectory,
     } = options;
     this.background = background;
     if (typeof grid === 'object') {
@@ -169,7 +169,7 @@ class GraphModel {
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
-    this.getAnchorLine = getAnchorLine;
+    this.customTrajectory = customTrajectory;
     this.edgeGenerator = createEdgeGenerator(this, edgeGenerator);
     this.width = options.width || this.rootEl.getBoundingClientRect().width;
     this.height = options.height || this.rootEl.getBoundingClientRect().height;
@@ -1214,8 +1214,12 @@ class GraphModel {
     nodes.forEach((node) => {
       const { x, y, width, height } = node;
       const { strokeWidth = 0 } = node.getNodeStyle();
-      nodesX = nodesX.concat([x + width / 2 + strokeWidth, x - width / 2 - strokeWidth]);
-      nodesY = nodesY.concat([y + height / 2 + strokeWidth, y - height / 2 - strokeWidth]);
+      const maxX = x + width / 2 + strokeWidth;
+      const minX = x - width / 2 - strokeWidth;
+      const maxY = y + height / 2 + strokeWidth;
+      const minY = y - height / 2 - strokeWidth;
+      nodesX = nodesX.concat([maxX, minX].filter(num => !Number.isNaN(num)));
+      nodesY = nodesY.concat([maxY, minY].filter(num => !Number.isNaN(num)));
     });
 
     const minX = Math.min(...nodesX);

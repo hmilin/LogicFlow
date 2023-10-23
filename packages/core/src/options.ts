@@ -7,6 +7,7 @@ import {
   EdgeData,
   Extension,
   GraphConfigData,
+  Point,
 } from './type';
 import { KeyboardDef } from './keyboard';
 import { EditConfigInterface } from './model/EditConfigModel';
@@ -123,13 +124,13 @@ export type Definition = {
    *        any: 自定义边及其他数据
    */
   edgeGenerator?: (sourceNode: any, targetNode: any, currentEdge?: any) => string | any | undefined;
-  getAnchorLine?: (props: CustomAnchorLineProps) => VNode;
+  customTrajectory?: (props: CustomAnchorLineProps) => VNode;
   [key: string]: any;
 } & EditConfigInterface;
 
 export interface CustomAnchorLineProps {
-  sourcePoint: { x:number, y:number };
-  targetPoint: { x:number, y:number };
+  sourcePoint: Point;
+  targetPoint: Point;
   [key: string]: any;
 }
 
